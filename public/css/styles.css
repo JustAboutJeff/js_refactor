@@ -1,0 +1,71 @@
+body {
+  background: url(/img/excitebike.jpg);
+}
+
+div.container {
+  position: relative;
+}
+
+div#game_over {
+  text-align: center;
+  background: black;
+  color: white;
+}
+
+table.racer_table {
+  position: absolute;
+  top: 610px;
+}
+
+table.racer_table td {
+  height: 50px;
+  width: 50px;
+  background: none;
+  display:inline-block;
+}
+
+.strip:nth-child(1) td.active {
+  background: url(/img/bike_red.png) no-repeat;
+  padding: 5px 0;
+}
+
+.strip:nth-child(2) td.active {
+  background: url(/img/bike_blue.png) no-repeat;
+  padding: 5px 0;
+}
+
+.strip:nth-child(3) td.active {
+  background: url(/img/bike_green.png) no-repeat;
+  padding: 5px 0;
+}
+
+.strip:nth-child(4) td.active {
+  background: url(/img/bike_yellow.png) no-repeat;
+  padding: 5px 0;
+}
+
+input {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 10px 0;
+  margin: 10px auto;
+}
+
+input[type='submit'] {
+  padding: 20px 50px;
+  display: block;
+}
+
+label {
+  display: inline-block;
+  color: white;
+}
+
+div#login {
+  padding: 20px;
+  width: 600px;
+  margin: 0 auto;
+  background: grey;
+  border: 1px solid black;
+}
+
