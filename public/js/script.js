@@ -1,38 +1,31 @@
-$(document).ready(acceptKeyToMove);
+(function(window) {
+  $(document).ready(function(){
+    var player1 = new Player($('.strip:nth-child(1)').attr("id"),$('.strip:nth-child(1)').data("initials"));
+    var player2 = new Player($('.strip:nth-child(2)').attr("id"),$('.strip:nth-child(2)').data("initials"));
 
-function buildTrack(size) {
-  for(var i = 0; i < size; i++) {
-    $('tr.strip').append('<td></td>');
-  }
-}
+    var game = new Game();
 
-function gameOver() {
-  return $('tr.strip td:last-child').hasClass('active');
-}
+    buildTrack(35);
 
-function getWinner() {
-  return $('tr.strip td:last-child.active').parent().attr("id");
-}
+    $(document).on('keyup', function(event) {
+      game.onKeyUp(event.which);
+    });
+  });
 
-function acceptKeyToMove() {
-  buildTrack(35);
-  var startTime = (new Date().getTime() / 1000 );
-  $(document).keyup(function(event) {
-    if (gameOver()) {
+var counter = 0;
+
+function Game() {
+  this.onKeyUp = function(key) {
+    counter ++;
+    if (counter === 1) {
+      this.startTime = new Date().getTime();
+    }
+    if (this.gameOver()) {
       $(document).unbind('keyup');
-      var endTime = (new Date().getTime() / 1000 );
-      var duration = (endTime - startTime);
-      var winnerId = getWinner();
-      var data = {game_id: gameId, duration: duration, winner_id: winnerId};
-      $.post('/game_over', data, function(response){
-        $('body').append(response);
-      });
-      // var playAgain = confirm("GAME OVER! TIME OF: " + (winTime) + " S, PLAY AGAIN?");
-      // if (playAgain) { location.reload(); }
+      this.postResults();
     }
     else {
       event.preventDefault();
-      var key = event.which;
       switch(key) {
         case 192: //RED BIKE, KEY = `
           $('.strip:nth-child(1) > td.active').removeClass('active').next().addClass('active');
@@ -50,5 +43,35 @@ function acceptKeyToMove() {
           break;
       }
     }
-  });
+  },
+  this.gameOver = function () {
+    return $('tr.strip td:last-child').hasClass('active');
+  },
+  this.getWinner = function () {
+    return $('tr.strip td:last-child.active').parent().attr("id");
+  },
+  this.postResults = function() {
+    var endTime = new Date().getTime();
+    this.duration = ((endTime - this.startTime) / 1000 );
+    var winnerId = this.getWinner();
+    var data = { game_id: gameId, duration: this.duration, winner_id: winnerId };
+    $.post('/game_over', data, function(response){ $('body').append(response); });
+  }
+};
+
+function buildTrack(size) {
+  for(var i = 0; i < size; i++) {
+    $('tr.strip').append('<td></td>');
+  }
 }
+
+function Player(id,initials,position) {
+  this.id = id;
+  this.initials = initials;
+  this.position = position;
+}
+
+}(window));
+
+
+

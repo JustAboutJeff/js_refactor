@@ -13,8 +13,6 @@ post '/' do
   @game.save
     if @game.valid?
       erb :game
-    else
-      # erb :error
     end
 end
 
@@ -26,7 +24,7 @@ end
 post '/game_over' do
   @game = Game.find(params[:game_id])
   @game.winner = params[:winner_id]
-  @game.duration = params[:duration]
+  @game.duration = params[:duration].to_f.round(3)
   @game.save
   p @game
   erb :game_over, :layout => false
